@@ -1,0 +1,32 @@
+[Linux]
+Instalar o pacote gtk na sua distribuição;
+No local do arquivo .c rodar "gcc -g -o Controle_estoque controle_estoque.c $(pkg-config --cflags --libs gtk+-3.0)";
+Rodar com "./Controle_estoque";
+**Ter gcc instalado para compilar codigo em c (Todas as distros grandes e completas ja vem)
+
+[Windows por WSL]
+sudo apt install libgtk-3-dev pkg-config
+sudo apt update
+pkg-config --cflags --libs gtk+-3.0
+compilar com "gcc controle_estoque.c -o controle_estoque $(pkg-config --cflags gtk+-3.0) $(pkg-config --libs gtk+-3.0)"
+executar o aquivo ./controle_estoque
+
+[Windows com emulação pelo mysys]
+(Instruções para emulação encontradas em: https://www.gtk.org/docs/installations/windows/#using-gtk-from-msys2-packages)
+
+Instalar mysys2 pelo setup no site;
+Usar a versão ucrt64;
+Rodar "pacman -S mingw-w64-ucrt-x86_64-gcc";
+Rodar "pacman -S mingw-w64-ucrt-x86_64-gtk3";
+Rodar "pacman -S mingw-w64-ucrt-x86_64-pkg-config";
+Mover arquivo .c para pasta home dentro do mysys (C:\msys64\home\{seu_usuario});
+Compilar com "x86_64-w64-mingw32-gcc -g -o Controle_estoque controle_estoque.c $(pkg-config --cflags --libs gtk+-3.0)";
+**Os arquivos csv e txt vao ficar dentro do /home --> Tem que ficar ai dentro por conta do gtk;
+**Se quiser testar se instalou gtk corretamente usar "pacman -Qs gtk3";
+
+Obs: Em progamas de planilia por padrão deve funcionar normalmente, mas se seu excel (or similar) nao estiver ajustado para CSV's ajuste-o com os seguintes passos:
+	1- No excel abra uma planilia vazia;
+	2- Clicar na opção "Dados" nas abas superiores;
+	3- Clicar em "Obter Dados Externos" e posteriormente em "De Texto";
+	4- Selecione o arquivo csv criado novamente (Lembre-se que esta dentro do home do mysys64!);
+	5- Avance e marque na janela o item "Ponto e vírgula" e avance ate concluir. :D
