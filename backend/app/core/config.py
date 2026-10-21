@@ -15,7 +15,8 @@ INSECURE_DEFAULT_KEY = "dev-insecure-secret-key-change-me"
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    # Variáveis vazias (ex.: `ANTHROPIC_API_KEY=` no docker-compose) contam como não definidas.
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore", env_ignore_empty=True)
 
     app_name: str = "Estoque Idealization"
     environment: Literal["development", "production", "test", "desktop"] = "development"
