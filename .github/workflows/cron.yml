@@ -1,0 +1,32 @@
+name: Cron do ambiente online
+
+# Hospedagens gratuitas "dormem" quando ociosas, então o agendador interno não é confiável lá.
+# Este workflow chama os gatilhos protegidos da aplicação. Configure em
+# Settings → Secrets and variables → Actions:
+#   APP_URL     → https://seu-app.onrender.com
+#   CRON_TOKEN  → o mesmo valor da variável CRON_TOKEN do servidor
+on:
+  schedule:
+    - cron: "0 11 * * *" # 08:00 em Brasília: resumo diário
+    - cron: "0 6 * * *" # 03:00 em Brasília: recria os dados da demonstração
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    env:
+      APP_URL: ${{ secrets.APP_URL }}
+      CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
+    steps:
+      - name: Chamar a aplicação
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_TOKEN" ]; then
+            echo "Secrets APP_URL/CRON_TOKEN não configurados; nada a fazer."; exit 0
+          fi
+          # acorda o serviço (pode levar ~1 min no plano gratuito)
+          curl -fsS --retry 10 --retry-delay 10 --retry-all-errors "$APP_URL/api/v1/health"
+          if [ "${{ github.event.schedule }}" = "0 6 * * *" ]; then
+            curl -fsS -X POST -H "X-Cron-Token: $CRON_TOKEN" --max-time 300 "$APP_URL/api/v1/internal/demo-reset"
+          else
+            curl -fsS -X POST -H "X-Cron-Token: $CRON_TOKEN" "$APP_URL/api/v1/internal/daily-summary"
+          fi

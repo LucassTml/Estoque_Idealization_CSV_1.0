@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+
+# Dados locais e segredos
+backend/data/
+data/
+.env
+*.db
+*.db-shm
+*.db-wal
+
+# Build do executável
+build/
+dist/
+*.spec.bak
+
+# IDEs
+.idea/
+.vscode/
+.DS_Store

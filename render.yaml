@@ -1,0 +1,31 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec)
+# Banco: use um PostgreSQL gratuito do Neon (https://neon.tech) e cole a URL em DATABASE_URL.
+services:
+  - type: web
+    name: estoque-idealization
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false # URL do Neon: postgresql://usuario:senha@host/banco?sslmode=require
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CRON_TOKEN
+        generateValue: true # usado pelo workflow de cron (resumo diário e reset da demo)
+      - key: DEMO_MODE
+        value: "true"
+      - key: ANTHROPIC_API_KEY
+        sync: false # opcional: habilita o assistente com IA
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false # opcional
+      - key: SMTP_HOST
+        sync: false # opcional
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false

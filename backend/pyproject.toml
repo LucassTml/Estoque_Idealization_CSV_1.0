@@ -1,0 +1,58 @@
+[project]
+name = "estoque-idealization"
+version = "2.0.0"
+description = "API de gestão de estoque: produtos, movimentações, compras, relatórios, previsão de demanda e assistente com IA."
+requires-python = ">=3.13"
+dependencies = [
+    "alembic>=1.20.0",
+    "anthropic>=1.17.0",
+    "apscheduler>=3.11,<4",
+    "email-validator>=2.3.0",
+    "fastapi>=0.156.4",
+    "fpdf2>=2.8.9",
+    "httpx>=0.28.1",
+    "openpyxl>=3.1.5",
+    "psycopg[binary]>=3.3.6",
+    "pwdlib[argon2]>=0.3.1",
+    "pydantic-settings>=2.16.1",
+    "pyjwt>=2.15.1",
+    "python-barcode>=0.16.1",
+    "python-multipart>=0.0.32",
+    "segno>=1.6.6",
+    "sqlalchemy>=2.0",
+    "tzdata>=2026.5",
+    "uvicorn>=0.54.0",
+]
+
+[dependency-groups]
+desktop = [
+    "pyinstaller>=6.22.3",
+]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "C4", "RUF"]
+ignore = ["B008", "E501", "RUF001", "RUF002", "RUF003", "RUF012"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    "ignore:Dialect sqlite\\+pysqlite does \\*not\\* support Decimal objects natively",
+]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/seed.py"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["E402"]  # o ambiente precisa ser configurado antes de importar a aplicação
